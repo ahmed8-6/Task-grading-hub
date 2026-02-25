@@ -1,0 +1,23 @@
+import type { Request, Response, NextFunction } from "express";
+import type { AuthPayload } from "../types/auth.js";
+import jwt from "jsonwebtoken";
+
+export const isAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const header = req.headers.authorization;
+  if (!header?.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Missing token" });
+  }
+  const token = header.split(" ")[1] as string;
+  const privateKey: string = process.env.JWT_SECRET as string;
+  try {
+    const decodedToken = jwt.verify(token, privateKey) as AuthPayload;
+    req.user = decodedToken;
+    next();
+  } catch (error) {
+    // next(error);
+  }
+};
