@@ -15,6 +15,10 @@ const submissionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
+  submissionPath: {
+    type: String,
+    required: true,
+  },
   grade: {
     type: Number,
   },

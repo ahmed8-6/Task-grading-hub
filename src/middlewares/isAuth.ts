@@ -9,7 +9,9 @@ export const isAuth = async (
 ) => {
   const header = req.headers.authorization;
   if (!header?.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Missing token" });
+    return res
+      .status(401)
+      .json({ message: "You have to login to view this page" });
   }
   const token = header.split(" ")[1] as string;
   const privateKey: string = process.env.JWT_SECRET as string;

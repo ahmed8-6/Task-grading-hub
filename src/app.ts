@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRouter from "./routes/auth.route.js";
 import taskRouter from "./routes/task.route.js";
+import path from "path";
+import type { Request, Response, NextFunction } from "express";
 
 dotenv.config();
-console.log(process.env.DB_LOCAL);
+
 mongoose
   .connect(process.env.DB_LOCAL as string)
   .then(() => {
@@ -18,8 +20,20 @@ mongoose
 const app = express();
 
 app.use(express.json());
+app.use(
+  "/submissions",
+  express.static(path.join(process.cwd(), "submissions")),
+);
+
 app.use("/api/auth", authRouter);
 app.use("/api/task", taskRouter);
+
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  res.status(501).json({
+    status: "fail",
+    message: error.message,
+  });
+});
 
 const port: string = process.env.PORT || "3000";
 app.listen(port, () => {

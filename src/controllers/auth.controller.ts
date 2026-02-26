@@ -21,13 +21,12 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
     const token = await createToken(user);
-    console.log(token);
     res.status(200).json({
       status: "success",
       data: { id: user._id, name: user.name, token: token },
     });
   } catch (error) {
-    // next(error);
+    next(error);
   }
 };
 
@@ -53,7 +52,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
       data: { id: newUser._id, name: newUser.name, email: newUser.email },
     });
   } catch (error) {
-    // next(error);
+    next(error);
   }
 };
 
