@@ -9,7 +9,7 @@ import { isAdmin } from "../middlewares/isAdmin.js";
 import type { Request } from "express";
 import type { FileFilterCallback } from "multer";
 import multer from "multer";
-import { check } from "express-validator";
+import { pdfValidator, validate } from "../middlewares/validators.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -41,14 +41,8 @@ const router = Router();
 
 router.route("/").get(isAuth, getTasks);
 router.route("/add").post(isAuth, isAdmin, addTask);
-router.route("/submit/:taskId").post(
-  isAuth,
-  upload.single("task"),
-  check("task").custom((value, { req }) => {
-    if (req.file) return true;
-    throw new Error("please, upload the task");
-  }),
-  submitTask,
-);
+router
+  .route("/submit/:taskId")
+  .post(isAuth, upload.single("task"), pdfValidator, validate, submitTask);
 
 export default router;
