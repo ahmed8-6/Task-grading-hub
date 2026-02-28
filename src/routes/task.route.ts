@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { addTask, submitTask } from "../controllers/task.controller.js";
+import {
+  getTasks,
+  addTask,
+  submitTask,
+} from "../controllers/task.controller.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
 import type { Request } from "express";
@@ -21,7 +25,7 @@ const fileFilter = function (
   file: Express.Multer.File,
   cb: FileFilterCallback,
 ) {
-  if (file.mimetype === "pdf") {
+  if (file.mimetype === "application/pdf") {
     cb(null, true);
   } else {
     cb(new Error("Unsupported file format, upload a pdf format file"));
@@ -35,6 +39,7 @@ const upload = multer({
 
 const router = Router();
 
+router.route("/").get(isAuth, getTasks);
 router.route("/add").post(isAuth, isAdmin, addTask);
 router.route("/submit/:taskId").post(
   isAuth,

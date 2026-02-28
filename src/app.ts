@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRouter from "./routes/auth.route.js";
 import taskRouter from "./routes/task.route.js";
+import submissionRouter from "./routes/submission.route.js";
+
 import path from "path";
 import type { Request, Response, NextFunction } from "express";
 
@@ -26,11 +28,12 @@ app.use(
 );
 
 app.use("/api/auth", authRouter);
-app.use("/api/task", taskRouter);
+app.use("/api/tasks", taskRouter);
+app.use("/api/submissions", submissionRouter);
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(501).json({
-    status: "fail",
+    status: "error",
     message: error.message,
   });
 });

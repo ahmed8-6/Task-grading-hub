@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 interface Isubmission {
-  title: string;
-  description: string;
-  deadline: string;
+  userId: mongoose.Types.ObjectId | string;
+  taskId: mongoose.Types.ObjectId | string;
+  submissionPath: string;
 }
 
 const submissionSchema = new mongoose.Schema({
@@ -18,12 +18,6 @@ const submissionSchema = new mongoose.Schema({
   submissionPath: {
     type: String,
     required: true,
-  },
-  grade: {
-    type: Number,
-  },
-  feedback: {
-    type: String,
   },
 });
 

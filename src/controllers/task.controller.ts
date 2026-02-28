@@ -3,6 +3,20 @@ import { Task } from "../models/task.model.js";
 import { Submission } from "../models/submission.model.js";
 import { validationResult } from "express-validator";
 
+const getTasks = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const tasks = await Task.find({ deadline: { $gt: new Date() } });
+    res.status(200).json({
+      status: "success",
+      data: {
+        tasks,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const addTask = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title } = req.body;
@@ -69,4 +83,4 @@ const submitTask = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { addTask, submitTask };
+export { getTasks, addTask, submitTask };
