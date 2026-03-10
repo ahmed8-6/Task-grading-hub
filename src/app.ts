@@ -7,7 +7,8 @@ import submissionRouter from "./routes/submission.route.js";
 
 import path from "path";
 import type { Request, Response, NextFunction } from "express";
-
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./swagger.js";
 dotenv.config();
 
 mongoose
@@ -37,6 +38,8 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     message: error.message,
   });
 });
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const port: string = process.env.PORT || "3000";
 app.listen(port, () => {
